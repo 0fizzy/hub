@@ -417,15 +417,6 @@ local Speed = AutofarmSection.Dropdown({
 			fireproximityprompt(game:GetService("Workspace").SpeedQuest.ProximityPrompt)
 			task.wait(.4)
 			game:GetService("Players").LocalPlayer.PlayerGui.TrackRun.Frame.agree.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
-			task.wait(.2)
-			mouse1click()
-			task.wait(.1)
-			mouse1click()
-			task.wait(.1)
-			mouse1click()
-			task.wait(.1)
-			mouse1click()
-			task.wait(.1)
 		end
 		if Value == "Running" then
 			local teleport_table = {
@@ -558,8 +549,6 @@ local Stamina = AutofarmSection.Dropdown({
 			_G.FarmStamina = true
 			if _G.FarmStamina == true then
 				while true do
-					game.Players.LocalPlayer.Character.Tackle.Disabled = true
-					game:GetService("StarterPlayer").StarterCharacterScripts.Tackle.Disabled = true
 					task.wait()
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 240, 106)
 					task.wait(.1)
