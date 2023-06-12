@@ -273,7 +273,7 @@ local ServerLag = GeneralSection.Button({
 
 --//settings + variables
 getgenv().Toggled=false
-getgenv().KeyBind="P"
+getgenv().KeyBind="Z"
 getgenv().Delay=0.7
 local UIS=game:GetService'UserInputService'
 
