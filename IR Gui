@@ -193,7 +193,7 @@ local HBE = GeneralSection.Dropdown({
 			end)
 
 			-- Settings
-			_G.Size = 16 -- size
+			_G.Size = _G.HBSize -- size
 			_G.enabled = false
 
 			--code
@@ -227,27 +227,32 @@ local HBE = GeneralSection.Dropdown({
 				end
 			end
 
-	end
-	if Value == "Toggle HBE on" then
-		_G.enabled = true
-	end
-	if Value == "Toggle HBE off" then
-		_G.enabled = false
-	end
+		end
+		if Value == "Toggle HBE on" then
+			_G.enabled = true
+		end
+		if Value == "Toggle HBE off" then
+			_G.enabled = false
+		end
 	end,
 	Options = {
-	"HBE Script",
-	"Toggle HBE on",
-	"Toggle HBE off"
-},
-Menu = {
-	Information = function(self)
-		Tab.Banner({
-			Text = "hbe"
-		})
-	end
-}
+		"HBE Script",
+		"Toggle HBE on",
+		"Toggle HBE off"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "hbe"
+			})
+		end
+	}
 })
+local HBESize = GeneralSection.TextField({
+	Text = "HBESize",
+	Callback = function(Number)
+		_G.HBSize = Number		
+	end})
 local PowerManipulation = GeneralSection.TextField({
 	Text = "Infinite Power",
 	Callback = function(Power)
@@ -268,9 +273,6 @@ local PowerManipulation = GeneralSection.TextField({
 local ServerLag = GeneralSection.Button({
 	Text = "Server Lag",
 	Callback = function()
-		--// fixed by ewo 6/17/2022
-
-		--//settings + variables
 		getgenv().Toggled=false
 		getgenv().KeyBind="P"
 		getgenv().Delay=0.7
