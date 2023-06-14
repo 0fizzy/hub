@@ -196,7 +196,19 @@ local HBE = GeneralSection.Dropdown({
 		end
 	}
 })
-
+local HBEChanger = GeneralSection.TextField({
+	Text = "HBE Size",
+	Callback = function(Number)
+	_G.Size = Number	
+	end,
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "s"
+			})
+		end
+	}
+})
 local PowerManipulation = GeneralSection.TextField({
 	Text = "Infinite Power",
 	Callback = function(Power)
@@ -663,6 +675,7 @@ while task.wait() do
 if _G.enabled then
 for i,v in next, game:GetService('Players'):GetPlayers() do
 if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+if v.Team ~= game.Players.LocalPlayer.Team then
 pcall(function()
 v.Character.HumanoidRootPart.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
 v.Character.HumanoidRootPart.Transparency = 0.85
@@ -670,6 +683,7 @@ v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Bright red")
 v.Character.HumanoidRootPart.Material = "Neon"
 v.Character.HumanoidRootPart.CanCollide = false
 end)
+end
 end
 end
 else
