@@ -1,5 +1,4 @@
 --Lib/Tab
-
 local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 local Tab = Lib.Load({
 	Title = "Xero IR GUI v2",
@@ -170,194 +169,58 @@ local DisableTackle = GeneralSection.TextField({
 	Text = "Disable Tackle",
 	Callback = function(User)
 		game:GetService("Workspace"):WaitForChild(User).OldTackle.Disabled = true		
-	end})
+end})
 local Charger = GeneralSection.TextField({
 	Text = "Charger",
 	Callback = function(Number)
-		game:GetService("Players").PolillaAtomica1.Data.Power.Value = Number		
-	end})
+		game:GetService("Players").LocalPlayer.Data.Power.Value = Number		
+end})
 local HBE = GeneralSection.Dropdown({
 	Text = "Hitbox Expander",
 	Callback = function(Value)
-		if Value == "HBE Script" then
-			--anti kick
-			local old;
-
-			old = hookmetamethod(game,"__namecall",function(self,...)
-				local method = getnamecallmethod() 
-
-				if method == "Kick" or method == "kick" then
-					return 
-				end
-				return old(self,...)
-			end)
-
-			-- Settings
-			_G.Size = 16 -- size
-			_G.enabled = false
-
-			--code
-			while task.wait() do
-				if _G.enabled then
-					for i,v in next, game:GetService('Players'):GetPlayers() do
-						if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-							if v.Team ~= game.Players.LocalPlayer.Team then
-								pcall(function()
-									v.Character.HumanoidRootPart.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
-									v.Character.HumanoidRootPart.Transparency = 0.85
-									v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Bright red")
-									v.Character.HumanoidRootPart.Material = "Neon"
-									v.Character.HumanoidRootPart.CanCollide = false
-								end)
-							end
-						end
-					end
-				else
-					for i,v in next, game:GetService('Players'):GetPlayers() do
-						if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-							pcall(function()
-								v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
-								v.Character.HumanoidRootPart.Transparency = 1
-								v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
-								v.Character.HumanoidRootPart.Material = "Plastic"
-								v.Character.HumanoidRootPart.CanCollide = false
-							end)
-						end
-					end
-				end
-			end
-
-	end
-	if Value == "Toggle HBE on" then
-		_G.enabled = true
-	end
-	if Value == "Toggle HBE off" then
-		_G.enabled = false
-	end
+		if Value == "HBE" then
+			_G.enabled = true
+            else
+            _G.enabled = false
+		end
 	end,
 	Options = {
-	"HBE Script",
-	"Toggle HBE on",
-	"Toggle HBE off",
-		
-},
-Menu = {
-	Information = function(self)
-		Tab.Banner({
-			Text = "hbe"
-		})
-	end
-}
+		"HBE",
+		"Normal HB"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "hbe"
+			})
+		end
+	}
 })
+
 local PowerManipulation = GeneralSection.TextField({
 	Text = "Infinite Power",
 	Callback = function(Power)
-		local mt = getrawmetatable(game);
+local mt = getrawmetatable(game);
 		local old = mt.__namecall
 		setreadonly(mt,false)
 		mt.__namecall = newcclosure(function(remote,...)
 			args = {...}
 			method = tostring(getnamecallmethod())
 			if method == "FireServer" and tostring(remote) == "OFF" then
-				args[2] = tonumber(Power)
+				args = _G.shoot
 				return old(remote,unpack(args))
 			end      
 			return old(remote,...)
 		end)
-		setreadonly(mt,true)	     	
-	end})
-local ServerLag = GeneralSection.Button({
-	Text = "Server Lag",
-	Callback = function()
-		--// fixed by ewo 6/17/2022
-
---//settings + variables
-getgenv().Toggled=false
-getgenv().KeyBind="Z"
-getgenv().Delay=0.7
-local UIS=game:GetService'UserInputService'
-
---//main
-
-local function Source()
-game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-local function getmaxvalue(val)
-  local mainvalueifonetable = 49999
-  if type(val) ~= "number" then
-      return nil
-  end
-  local calculateperfectval = (mainvalueifonetable/(val+2))
-  return calculateperfectval
+		setreadonly(mt,true)
+        while task.wait() do
+_G.shoot = {
+    [1] = game.Players.LocalPlayer:GetMouse().Hit,
+    [2] = tonumber(Power)
+}
 end
+end})
 
-local function bomb(tableincrease, tries)
-local maintable = {}
-local spammedtable = {}
-
-table.insert(spammedtable, {})
-z = spammedtable[1]
-
-for i = 1, tableincrease do
-   local tableins = {}
-   table.insert(z, tableins)
-   z = tableins
-end
-
-local calculatemax = getmaxvalue(tableincrease)
-local maximum
-
-if calculatemax then
-    maximum = calculatemax
-    else
-    maximum = 10000
-end
-
-for i = 1, maximum do
-    table.insert(maintable, spammedtable)
-end
-
- if calculatemax then
-    maximum = calculatemax
-    else
-    maximum = 10000
-end
-
-for i = 1, maximum do
-    table.insert(maintable, spammedtable)
-end
-
-for i = 1, tries do
-   game.RobloxReplicatedStorage.UpdatePlayerBlockList:FireServer(maintable)
-end
-end
-
-
-bomb(250, 5) --// change values if client crashes
-end
-UIS.InputBegan:Connect(function(Key)
-   if Key.KeyCode==Enum.KeyCode[getgenv().KeyBind:upper()] and not UIS:GetFocusedTextBox() then
-       if getgenv().Toggled then
-           getgenv().Toggled=false
-           warn'Disabled!'
-       elseif not getgenv().Toggled then
-           getgenv().Toggled=true
-           warn'Enabled!'
-           while getgenv().Toggled do
-               Source()
-               wait(getgenv().Delay)
-           end
-       end
-   end
-end)
-	end,
-	Menu = {
-		Information = function(self)
-			Tab.Banner({
-				Text = "te muereee :("
-			})
-		end
-	}
-})
 --AutoFarm
 
 local IceCream = AutofarmSection.Dropdown({
@@ -693,8 +556,6 @@ local Stamina = AutofarmSection.Dropdown({
 			_G.FarmStamina = true
 			if _G.FarmStamina == true then
 				while true do
-					game.Players.LocalPlayer.Character.Tackle.Disabled = true
-					game:GetService("StarterPlayer").StarterCharacterScripts.Tackle.Disabled = true
 					task.wait()
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 240, 106)
 					task.wait(.1)
@@ -724,7 +585,7 @@ local Stamina = AutofarmSection.Dropdown({
 	end,
 	Options = {
 		"Start",
-		"Stop",
+		"Stop"
 	},
 	Menu = {
 		Information = function(self)
@@ -741,7 +602,7 @@ local Handles = AutofarmSection.TextField({
 			game:GetService("Players"):WaitForChild(User):WaitForChild("PlayerGui"):WaitForChild("GetHandlesQuestStuff"):WaitForChild("whereblack"):WaitForChild("Green"):FireServer()
 			task.wait()		
 		end
-	end})
+end})
 
 --Teleport
 
@@ -751,21 +612,21 @@ local Power = TeleportSection.Button({
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(483, 707, 30)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").PowerQuest.ProximityPrompt)
-	end})
+end})
 local Handles = TeleportSection.Button({
 	Text = "Handles",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(48, 240, -290)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").HandlesTraining.QuestButton.ProximityPrompt)
-	end})
+end})
 local Prestige = TeleportSection.Button({
 	Text = "Prestige",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(746, 376, -1042)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").PrestigeChat.ProximityPrompt)
-	end})
+end})
 local LimitBreaker = TeleportSection.Button({
 	Text = "LimitBreaker",
 	Callback = function()
@@ -773,11 +634,55 @@ local LimitBreaker = TeleportSection.Button({
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").LimitBreakerChat.ProximityPrompt)
 
-	end})
+end})
 local Hiss = TeleportSection.Button({
 	Text = "Hiss",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-154, 239, 350)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").GetHissa.ProximityPrompt)
-	end})
+end})
+--anti kick
+local old;
+
+old = hookmetamethod(game,"__namecall",function(self,...)
+   local method = getnamecallmethod() 
+   
+   if method == "Kick" or method == "kick" then
+       return 
+   end
+   return old(self,...)
+end)
+
+-- Settings
+_G.Size = 17 -- size
+_G.enabled = false
+
+--code
+while task.wait() do
+if _G.enabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
+v.Character.HumanoidRootPart.Transparency = 0.85
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Bright red")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+else
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+v.Character.HumanoidRootPart.Transparency = 1
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
+v.Character.HumanoidRootPart.Material = "Plastic"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
+end
