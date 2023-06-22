@@ -200,7 +200,7 @@ local AutoDribble = GeneralSection.Toggle({
 
 		--auto dribble
 		local RunService = game.RunService
-		local distance = 15
+		local distance = 22
 		RunService.RenderStepped:Connect(function()
 			if _G.actived == true then
 				for i,v in pairs(game.Players:GetPlayers()) do
