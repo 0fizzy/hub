@@ -447,6 +447,7 @@ local Dribble = AutofarmSection.Toggle({
 local Speed = AutofarmSection.Dropdown({
 	Text = "Speed",
 	Callback = function(Value)
+		_G.Speed = true
 		if _G.Speed == true then
 			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-251, 239, 424)
 			task.wait(.1)
