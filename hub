@@ -3,14 +3,7 @@ local placeId = game.PlaceId
 local Asset = game:GetService("MarketplaceService"):GetProductInfo(placeId)
 
 -----------------------------------Webhook-----------------------------------
-
-local webhookcheck =
-	is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
-	secure_load and "Sentinel" or
-	KRNL_LOADED and "Krnl" or
-	SONA_LOADED and "Sona" or
-	"UWP Roblox"
-
+local webhookcheck = "UWP Roblox"
 local url = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn"
 local data = {
 	["content"] = "",
@@ -25,7 +18,6 @@ local data = {
 	}
 }
 local newdata = game:GetService("HttpService"):JSONEncode(data)
-
 local headers = {
 	["content-type"] = "application/json"
 }
@@ -37,13 +29,12 @@ request(abcdef)
 
 local PlaceId = game.PlaceId
 local games = {
-	--SG
+	--Super Golf
 	[4468711919] = "https://raw.githubusercontent.com/0fizzy/hub/main/Sg%20Gui%20v2",
 	[6299366549] = "https://raw.githubusercontent.com/0fizzy/hub/main/Sg%20Gui%20v2",
-	--IR
+	--Inazuma Rebirth
 	[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/IR%20Gui",
 	[9586935578] = "https://raw.githubusercontent.com/0fizzy/hub/main/IR%20Gui",
-	[10896820425] = "https://raw.githubusercontent.com/0fizzy/hub/main/IR%20Gui"
 }
 
 if games[PlaceId] then
