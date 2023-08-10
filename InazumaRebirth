@@ -1,1 +1,692 @@
---updating.
+--Lib/Tab
+local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
+local Tab = Lib.Load({
+	Title = "Xero IR GUI v2",
+	Style = 3,
+	SizeX = 500,
+	SizeY = 350,
+	Theme = "Aqua",
+	ColorOverrides = {
+		MainFrame = Color3.fromRGB(103, 103, 103)
+	}
+})
+
+--Sections
+
+local GeneralSection = Tab.New({
+	Title = "General"
+})
+local AutofarmSection = Tab.New({
+	Title = "Autofarm"
+})
+local TeleportSection = Tab.New({
+	Title = "Teleports"
+})
+
+--General
+
+local Fly = GeneralSection.Button({
+	Text = "Fly",
+	Callback = function()
+		local flycar = Instance.new("ScreenGui")
+		local veryepic = Instance.new("Frame")
+		local title = Instance.new("TextLabel")
+		local close = Instance.new("TextButton")
+		local fly = Instance.new("TextButton")
+
+
+		flycar.Name = "flycar"
+		flycar.Parent = game.CoreGui
+
+		veryepic.Name = "veryepic"
+		veryepic.Parent = flycar
+		veryepic.BackgroundColor3 = Color3.fromRGB(85, 255, 0)
+		veryepic.Position = UDim2.new(0.038906455, 0, 0.619164586, 0)
+		veryepic.Size = UDim2.new(0, 243, 0, 263)
+		veryepic.Active = true
+		veryepic.Draggable = true
+
+
+
+		fly.Name = "fly"
+		fly.Parent = veryepic
+		fly.BackgroundColor3 = Color3.fromRGB(85, 255, 0)
+		fly.Position = UDim2.new(0.0864197537, 0, 0.266159713, 0)
+		fly.Size = UDim2.new(0, 200, 0, 50)
+		fly.Font = Enum.Font.SourceSans
+		fly.Text = "Presiona aqui pe"
+		fly.TextColor3 = Color3.fromRGB(0, 0, 0)
+		fly.TextScaled = true
+		fly.TextSize = 14.000
+		fly.TextWrapped = true
+		fly.MouseButton1Down:connect(function()
+			local mouse = game.Players.LocalPlayer:GetMouse()
+			repeat wait() until mouse
+			local plr = game.Players.LocalPlayer
+			local torso = plr.Character.Torso
+			local flying = true
+			local deb = true
+			local ctrl = {f = 0, b = 0, l = 0, r = 0}
+			local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+			local maxspeed = 500
+			local speed = 0
+
+			function Fly()
+				local bg = Instance.new("BodyGyro", torso)
+				bg.P = 9e4
+				bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+				bg.cframe = torso.CFrame
+				local bv = Instance.new("BodyVelocity", torso)
+				bv.velocity = Vector3.new(0,0.1,0)
+				bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+				repeat wait()
+					plr.Character.Humanoid.PlatformStand = false
+					if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+						speed = speed+125.0+(speed/maxspeed)
+						if speed > maxspeed then
+							speed = maxspeed
+						end
+					elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+						speed = speed-250
+						if speed < 0 then
+							speed = 0
+						end
+					end
+					if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+						lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+					elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+					else
+						bv.velocity = Vector3.new(0,0.1,0)
+					end
+					bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+				until not flying
+				ctrl = {f = 0, b = 0, l = 0, r = 0}
+				lastctrl = {f = 0, b = 0, l = 0, r = 0}
+				speed = 0
+				bg:Destroy()
+				bv:Destroy()
+				plr.Character.Humanoid.PlatformStand = false
+			end
+			mouse.KeyDown:connect(function(key)
+				if key:lower() == "z" then
+					if flying then flying = false
+					else
+						flying = true
+						Fly()
+					end
+				elseif key:lower() == "w" then
+					ctrl.f = 1
+				elseif key:lower() == "s" then
+					ctrl.b = -1
+				elseif key:lower() == "a" then
+					ctrl.l = -1
+				elseif key:lower() == "d" then
+					ctrl.r = 1
+				end
+			end)
+			mouse.KeyUp:connect(function(key)
+				if key:lower() == "w" then
+					ctrl.f = 0
+				elseif key:lower() == "s" then
+					ctrl.b = 0
+				elseif key:lower() == "a" then
+					ctrl.l = 0
+				elseif key:lower() == "d" then
+					ctrl.r = 0
+				end
+				wait(5)
+			end)
+			Fly()
+		end)
+		fly.MouseButton1Down:connect(function()
+			veryepic.Visible = false
+		end)
+	end,
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "vuela alto obinnaxs"
+			})
+		end
+	}
+})
+local Reset = GeneralSection.Button({
+	Text = "Reset",
+	Callback = function()
+		game:GetService("Players").LocalPlayer.Character.Head:Destroy()
+	end,
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "te muereee :("
+			})
+		end
+	}
+})
+local DisableTackle = GeneralSection.TextField({
+	Text = "Disable Tackle",
+	Callback = function(User)
+		game:GetService("Workspace"):WaitForChild(User).OldTackle.Disabled = true		
+end})
+local Charger = GeneralSection.TextField({
+	Text = "Charger",
+	Callback = function(Number)
+		game:GetService("Players").PolillaAtomica1.Data.Power.Value = Number		
+end})
+local HBE = GeneralSection.Dropdown({
+	Text = "Hitbox Expander",
+	Callback = function(Value)
+		if Value == "HBE" then
+			_G.enabled = true
+            else
+            _G.enabled = false
+		end
+	end,
+	Options = {
+		"HBE",
+		"Normal HB"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "hbe"
+			})
+		end
+	}
+})
+local PowerManipulation = GeneralSection.TextField({
+	Text = "Infinite Power",
+	Callback = function(Power)
+local mt = getrawmetatable(game);
+		local old = mt.__namecall
+		setreadonly(mt,false)
+		mt.__namecall = newcclosure(function(remote,...)
+			args = {...}
+			method = tostring(getnamecallmethod())
+			if method == "FireServer" and tostring(remote) == "OFF" then
+				args = _G.shoot
+				return old(remote,unpack(args))
+			end      
+			return old(remote,...)
+		end)
+		setreadonly(mt,true)
+        while task.wait() do
+_G.shoot = {
+    [1] = game.Players.LocalPlayer:GetMouse().Hit,
+    [2] = tonumber(Power)
+}
+end
+end})
+
+--AutoFarm
+
+local IceCream = AutofarmSection.Dropdown({
+	Text = "IceCream",
+	Callback = function(Value)
+		if Value == "Start" then
+			getgenv().Farm = true --Desactivate to stop
+			if getgenv().Farm == true then
+
+				--Locals
+				local SBPart = Instance.new("Part", workspace)
+				local lp = game:GetService("Players").LocalPlayer
+				local PutBox = game:GetService("Workspace").PUTTINGBoxPart
+				local GetBox = game:GetService("Workspace").GettingBoxPart
+
+				--SBPart
+				SBPart.Position = Vector3.new(99998, 9988, 99999)
+				SBPart.Anchored = true
+				SBPart.Size = Vector3.new(9999, 10 , 9999)
+				SBPart.Color = Color3.fromRGB(255, 255, 255)
+
+				local UPart = Instance.new("Part", workspace)
+
+				--UPart
+				UPart.Position = Vector3.new(798, 277, -267)
+				UPart.Anchored = true
+				UPart.Size = Vector3.new(100, 1 , 100)
+				UPart.Color = Color3.fromRGB(255, 255, 255)
+
+				--BoxParts
+				GetBox.Size = Vector3.new(700, 2200, 700)
+				GetBox.Position = Vector3.new(100591, 10407, 99854)
+				PutBox.Size = Vector3.new(700, 2200, 700)
+				PutBox.Position = Vector3.new(99097, 10407, 99860)
+
+				--Script
+				while true do
+					local teleport_table = {
+						location1 = Vector3.new(798, 278, -267), 
+						location2 = Vector3.new(808, 286, -271.2)  
+					}
+					local tween_s = game:GetService('TweenService')
+					local tweeninfo = TweenInfo.new(.01,Enum.EasingStyle.Linear)
+					local lp = game.Players.LocalPlayer
+					function bypass_teleport(v)
+						if lp.Character and 
+							lp.Character:FindFirstChild('HumanoidRootPart') then
+							local cf = CFrame.new(v)
+							local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+							a:Play()
+						end
+					end
+					bypass_teleport(teleport_table.location1)
+					bypass_teleport(teleport_table.location1)	
+					wait(.1)
+					fireproximityprompt(game:GetService("Workspace").IceCreamGuy.ExpMoneyQuest.ProximityPrompt)
+					task.wait(.1)
+					fireproximityprompt(game:GetService("Workspace").IceCreamGuy.ExpMoneyQuest.ProximityPrompt)
+					task.wait(.1)
+					fireproximityprompt(game:GetService("Workspace").IceCreamGuy.ExpMoneyQuest.ProximityPrompt)
+					task.wait()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100562, 9998, 99877)
+					wait(12.5)
+					game:GetService("Players").LocalPlayer.PlayerGui.MoneyAndEXPQuest.MainFrame.Frame.Agree.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+					wait(.2)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					task.wait(.025)
+					mouse1click()
+					wait()
+					lp.Character.HumanoidRootPart.CFrame = CFrame.new(100627, 9996, 99878)
+					wait(1)
+					lp.Character.HumanoidRootPart.CFrame = CFrame.new(99198, 9996, 99873)
+					wait(1)
+					if getgenv().Farm == false then break
+					end
+				end
+			end
+		end
+		if Value == "Stop" then
+			getgenv().Farm = false
+		end
+		if Value == "Destroy Van" then
+			game:GetService("Workspace").Map.Beach.IceCreamVan:Destroy()
+		end
+		if Value == "Destroy Beach" then
+			while task.wait(0.0001) do
+				game:GetService("Workspace").Map.Beach.Part:Destroy()
+			end				
+		end
+	end,
+	Options = {
+		"Start",
+		"Stop",
+		"Destroy Van",
+		"Destroy Beach"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "Helado mision locura."
+			})
+		end
+	}
+})
+local i4v4Farm = AutofarmSection.Dropdown({
+	Text = "4v4 Farm",
+	Callback = function(Value)
+		if Value == "Join 4v4" then
+			game:GetService("TeleportService"):Teleport(9586935578, LocalPlayer)	
+		end	
+		if Value == "Start 4v4" then
+			_G.Farm4v4 = true
+			if _G.Farm4v4 == true then
+				while true do
+					game:GetService("Players").LocalPlayer.PlayerGui.buttonofskip.Frame.BackgroundColor3 = Color3.new(0,0,0)
+					game:GetService("Workspace"):WaitForChild("Ball")
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2, 273, -131)	
+					task.wait()
+					game:GetService("Players").LocalPlayer.Character.BlockAHeader.Header:FireServer()
+					task.wait(.1)
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-0, 273, 166)	
+					wait(1)
+					game:GetService("Players").LocalPlayer.PlayerGui.buttonofskip.Frame.TextButton.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+					mouse1click()
+					task.wait()
+					mouse1click()
+					task.wait()
+					mouse1click()
+					task.wait()
+					mouse1click()
+					task.wait(1)
+					game:GetService("Players").LocalPlayer.PlayerGui.skipvote.Frame.agree.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+					task.wait(.5)
+					mouse1click()
+					task.wait()
+					mouse1click()
+					game:GetService("Players").LocalPlayer.PlayerGui.buttonofskip.Frame.TextButton.Size = UDim2.new(0.135, 0, 0.033, 0)
+					if _G.Farm4v4 == false then break
+					end	
+				end
+			end   
+		end
+		if Value == "Stop 4v4" then
+			_G.Farm4v4 = false
+		end
+	end,
+	Options = {
+		"Join 4v4",
+		"Start 4v4",
+		"Stop 4v4"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "4v4 farmeo !!! op 100%%%%"
+			})
+		end
+	}
+})
+local Speed = AutofarmSection.Dropdown({
+	Text = "Speed",
+	Callback = function(Value)
+		if Value == "Start" then
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-251, 239, 424)
+			task.wait(.1)
+			fireproximityprompt(game:GetService("Workspace").SpeedQuest.ProximityPrompt)
+			task.wait(.4)
+			game:GetService("Players").LocalPlayer.PlayerGui.TrackRun.Frame.agree.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+			task.wait(.2)
+			mouse1click()
+			task.wait(.1)
+			mouse1click()
+			task.wait(.1)
+			mouse1click()
+			task.wait(.1)
+			mouse1click()
+			task.wait(.1)
+		end
+		if Value == "Running" then
+			local teleport_table = {
+				location1 = Vector3.new(-276, 240, 514), 
+				location2 = Vector3.new(-276, 240, 514)  
+			}
+			local tween_s = game:GetService('TweenService')
+			local tweeninfo = TweenInfo.new(1,Enum.EasingStyle.Linear)
+			local lp = game.Players.LocalPlayer
+
+			function bypass_teleport(v)
+				if lp.Character and 
+					lp.Character:FindFirstChild('HumanoidRootPart') then
+					local cf = CFrame.new(v)
+					local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+					a:Play()
+
+				end
+			end
+			bypass_teleport(teleport_table.location1)
+			bypass_teleport(teleport_table.location1)
+			wait(1)
+
+			local teleport_table = {
+				location2 = Vector3.new(-277, 240, 370), 
+				location1 = Vector3.new(-277, 240, 370)  
+			}
+			bypass_teleport(teleport_table.location1)
+			bypass_teleport(teleport_table.location1)	
+			wait(1)
+
+			local teleport_table = {
+				location1 = Vector3.new(-276, 240, 514), 
+				location2 = Vector3.new(-276, 240, 514)  
+			}
+			bypass_teleport(teleport_table.location1)
+			bypass_teleport(teleport_table.location1)
+			wait(1)
+			local teleport_table = {
+				location2 = Vector3.new(-277, 240, 370), 
+				location1 = Vector3.new(-277, 240, 370)  
+			}
+			bypass_teleport(teleport_table.location1)
+			bypass_teleport(teleport_table.location1)	
+		end
+	end,
+	Options = {
+		"Start",
+		"Running"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "mira como me corro kachaummmm"
+			})
+		end
+	}
+})
+local Dribble = AutofarmSection.Dropdown({
+	Text = "Dribble",
+	Callback = function(Value)
+		if Value == "Start" then
+			_G.FarmDribble = true
+			if _G.FarmDribble == true then
+				while true do
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-874, 257, -250)
+					task.wait(.3)
+					fireproximityprompt(game:GetService("Workspace").DribbleQuest.ProximityPrompt)
+					wait(1)
+					game:GetService("Players").LocalPlayer.PlayerGui.DribbleQuest.Frame.agree.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+					task.wait(.3)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.7) 
+					local teleport_table = {
+						location1 = Vector3.new(-1875, 31, 116), 
+						location2 = Vector3.new(-1875, 31, 116)  
+					}
+					local tween_s = game:GetService('TweenService')
+					local tweeninfo = TweenInfo.new(.5,Enum.EasingStyle.Linear)
+					local lp = game.Players.LocalPlayer
+					function bypass_teleport(v)
+						if lp.Character and 
+							lp.Character:FindFirstChild('HumanoidRootPart') then
+							local cf = CFrame.new(v)
+							local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+							a:Play()
+						end
+					end
+					bypass_teleport(teleport_table.location1)
+					bypass_teleport(teleport_table.location1)	
+					wait(.6)
+					local teleport_table = {
+						location1 = Vector3.new(-874, 257, -250), 
+						location2 = Vector3.new(-874, 257, -250)  
+					}
+					bypass_teleport(teleport_table.location1)
+					bypass_teleport(teleport_table.location1)	
+					wait(1.5)
+					if _G.DribbleFarm == false then break
+					end
+				end
+			end
+		end
+		if Value == "Stop" then
+			_G.DribbleFarm = false
+		end
+	end,
+	Options = {
+		"Start",
+		"Stop"
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "dribbleoooooooooooooooooooo"
+			})
+		end
+	}
+})
+local Stamina = AutofarmSection.Dropdown({
+	Text = "Stamina",
+	Callback = function(Value)
+		if Value == "Start" then
+			_G.FarmStamina = true
+			if _G.FarmStamina == true then
+				while true do
+					game.Players.LocalPlayer.Character.Tackle.Disabled = true
+					game:GetService("StarterPlayer").StarterCharacterScripts.Tackle.Disabled = true
+					task.wait()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260, 240, 106)
+					task.wait(.1)
+					fireproximityprompt(game:GetService("Workspace").SquatBuyer.ProximityPrompt)
+					task.wait(.4)
+					game:GetService("Players").LocalPlayer.PlayerGui.SquatBuy.Frame.TextButton.Size = UDim2.new(44466666666, 4400 , 445555554444, 100)
+					task.wait(.2)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.1)
+					mouse1click()
+					task.wait(.1)
+					local input = loadstring(game:HttpGet('https://pastebin.com/raw/dYzQv3d8'))()
+					input.press(Enum.KeyCode.One)
+					wait(2)
+					if _G.FarmStamina == false then break	
+					end
+				end
+			end
+			if Value == "Stop" then
+				_G.FarmStamina = false
+			end
+		end
+	end,
+	Options = {
+		"Start",
+		"Stop",
+	},
+	Menu = {
+		Information = function(self)
+			Tab.Banner({
+				Text = "mira como me aguanto que locro"
+			})
+		end
+	}
+})
+local Handles = AutofarmSection.TextField({
+	Text = "Handles",
+	Callback = function(User)
+		while true do
+			game:GetService("Players"):WaitForChild(User):WaitForChild("PlayerGui"):WaitForChild("GetHandlesQuestStuff"):WaitForChild("whereblack"):WaitForChild("Green"):FireServer()
+			task.wait()		
+		end
+end})
+
+--Teleport
+
+local Power = TeleportSection.Button({
+	Text = "Power",
+	Callback = function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(483, 707, 30)
+		task.wait(.3)
+		fireproximityprompt(game:GetService("Workspace").PowerQuest.ProximityPrompt)
+end})
+local Handles = TeleportSection.Button({
+	Text = "Handles",
+	Callback = function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(48, 240, -290)
+		task.wait(.3)
+		fireproximityprompt(game:GetService("Workspace").HandlesTraining.QuestButton.ProximityPrompt)
+end})
+local Prestige = TeleportSection.Button({
+	Text = "Prestige",
+	Callback = function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(746, 376, -1042)
+		task.wait(.3)
+		fireproximityprompt(game:GetService("Workspace").PrestigeChat.ProximityPrompt)
+end})
+local LimitBreaker = TeleportSection.Button({
+	Text = "LimitBreaker",
+	Callback = function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-509, 242, -1161)
+		task.wait(.3)
+		fireproximityprompt(game:GetService("Workspace").LimitBreakerChat.ProximityPrompt)
+
+end})
+local Hiss = TeleportSection.Button({
+	Text = "Hiss",
+	Callback = function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-154, 239, 350)
+		task.wait(.3)
+		fireproximityprompt(game:GetService("Workspace").GetHissa.ProximityPrompt)
+end})
+--anti kick
+local old;
+
+old = hookmetamethod(game,"__namecall",function(self,...)
+   local method = getnamecallmethod() 
+   
+   if method == "Kick" or method == "kick" then
+       return 
+   end
+   return old(self,...)
+end)
+
+-- Settings
+_G.Size = 14.2 -- size
+_G.enabled = false
+
+--code
+while task.wait() do
+if _G.enabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+if v.Team ~= game.Players.LocalPlayer.Team then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
+v.Character.HumanoidRootPart.Transparency = 0.955
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Bright red")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+							end
+						end
+					end
+else
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+v.Character.HumanoidRootPart.Transparency = 1
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Medium stone grey")
+v.Character.HumanoidRootPart.Material = "Plastic"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
+end
+--
