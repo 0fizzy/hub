@@ -4,7 +4,7 @@ local Asset = game:GetService("MarketplaceService"):GetProductInfo(placeId)
 
 -----------------------------------Webhook-----------------------------------
 
-local webhookcheck = identifyexecutor and table.concat({ identifyexecutor() }, " ") or "Unknown";
+local webhookcheck = identifyexecutor and table.concat({ identifyexecutor() }, " ") or "Random trash executor";
 
 local url = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn"
 local data = {
@@ -32,12 +32,7 @@ request(abcdef)
 
 local PlaceId = game.PlaceId
 local games = {
-	--Super Golf
-	[4468711919] = "https://raw.githubusercontent.com/0fizzy/hub/main/Sg%20Gui%20v2",
-	[6299366549] = "https://raw.githubusercontent.com/0fizzy/hub/main/Sg%20Gui%20v2",
-	--Inazuma Rebirth
-	[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/IR%20Gui",
-	[9586935578] = "https://raw.githubusercontent.com/0fizzy/hub/main/IR%20Gui",
+	
 }
 
 if games[PlaceId] then
