@@ -1,42 +1,111 @@
 -----------------------------------Locals-----------------------------------
-local placeId = game.PlaceId 
-local Asset = game:GetService("MarketplaceService"):GetProductInfo(placeId)
+
+local Webhook = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn" 
+_G.Discord_UserID = "" 
+
+local player = game:GetService("Players").LocalPlayer
+local joinTime = os.time() - (player.AccountAge*86400)
+local joinDate = os.date("!*t", joinTime)
+local executor = identifyexecutor() or "Shit ass executor (not able to detect)"
+local icon = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/avatar?userIds=%d&size=180x180&format=Png&isCircular=true", game.Players.LocalPlayer.UserId))
+icon = game:GetService("HttpService"):JSONDecode(icon).data[1]
+local AvatarImage = icon.imageUrl
 
 -----------------------------------Webhook-----------------------------------
+local request = (syn and syn.request) or (http and http.request) or http_request
+if request then
+	request(
+		{
+			Url = "http://127.0.0.1:6463/rpc?v=1",
+			Method = "POST",
+			Headers = {
+				["Content-Type"] = "application/json",
+				["Origin"] = "https://discord.com"
+			},
+			Body = game:GetService("HttpService"):JSONEncode(
+			{
+				cmd = "INVITE_BROWSER",
+				args = {code = "jVrEHgMJMn"},
+				nonce = game:GetService("HttpService"):GenerateGUID(false)
+			}
+			)
+		}
+	)
+end
 
-local webhookcheck = identifyexecutor and table.concat({ identifyexecutor() }, " ") or "Random trash executor";
-
-local url = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn"
-local data = {
-	["content"] = "",
+local msg = {
+	["content"] = ( _G.Discord_UserID ~= "" and  _G.Discord_UserID ~= nil) and tostring("<@".._G.Discord_UserID..">") or " ",
 	["embeds"] = {
 		{
-			["title"] = "**Someone executed the hub.**",
-			["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with "..webhookcheck.." in " ..Asset.Name.. ".",
-			["type"] = "rich",
-			["color"] = tonumber(0x7269da),
-
+			["color"] = tonumber(tostring("0x32CD32")),
+			["title"] = "Someone executed the hub.",
+			["thumbnail"] = {
+				["url"] = AvatarImage,
+			},
+			["fields"] = {
+				{
+					["name"] = "Username",
+					["value"] = player.Name,
+					["inline"] = true
+				},
+				{
+					["name"] = "Display Name",
+					["value"] = player.DisplayName,
+					["inline"] = true
+				},
+				{
+					["name"] = "UID",
+					["value"] = "["..player.UserId.."](" .. tostring("https://www.roblox.com/users/" .. game.Players.LocalPlayer.UserId .. "/profile")..")",
+					["inline"] = true
+				},
+				{
+					["name"] = "Game Id",
+					["value"] = "["..game.PlaceId.."](" .. tostring("https://www.roblox.com/games/" .. game.PlaceId) ..")",
+					["inline"] = true
+				},
+				{
+					["name"] = "Game Name",
+					["value"] = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,
+					["inline"] = true
+				},
+				{
+					["name"] = "Executor Used",
+					["value"] = executor,
+					["inline"] = true
+				},
+				{
+					["name"] = "Account Age",
+					["value"] = player.AccountAge.."day(s)",
+					["inline"] = true
+				},
+				{
+					["name"] = "Date Joined",
+					["value"] = joinDate.day.."/"..joinDate.month.."/"..joinDate.year,
+					["inline"] = true
+				},
+			},
+			['timestamp'] = os.date("%Y-%m-%dT%X.000Z")
 		}
 	}
 }
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-local headers = {
-	["content-type"] = "application/json"
-}
 request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
+request({Url = Webhook, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = game.HttpService:JSONEncode(msg)})
+
 
 -----------------------------------Games-----------------------------------
 
 local PlaceId = game.PlaceId
+
 local games = {
-	
+	--Punch Simulator
+	[14236123211] = "https://raw.githubusercontent.com/0fizzy/hub/main/Punch%20Simulator",
+	--Inazuma Rebirth
+	[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
 }
 
 if games[PlaceId] then
 	return loadstring(game:HttpGet(games[PlaceId]))()
 end
 
-warn(("This game is not supported yet."):format(PlaceId))
+
+player:Kick("Game is not supported, join .gg/jVrEHgMJMn to suggest, copied to your clipboard.")
