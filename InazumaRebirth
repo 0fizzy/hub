@@ -1,6 +1,6 @@
 --[[
 If you manage to reach here, contact: esp_xero on discord.
-dont be a skid, this scripts takes days to do. respect that we dont win any money because of this
+dont be a skid, this scripts takes days to do.
 ]]
 
 --Lib/Tab
@@ -52,7 +52,7 @@ local PowerManipulation = GeneralSection.TextField({
 				[2] = tonumber(Power)
 			}
 		end
-end})
+	end})
 local AutoDribble = GeneralSection.Toggle({
 	Text = "Autodribble",
 	Callback = function(Value)
@@ -148,7 +148,7 @@ local MossExtender = GeneralSection.Button({
 		else
 			print("Already executed")
 		end
-end})
+	end})
 local LagServer = GeneralSection.Toggle({
 	Text = "Lag Server (only xero can !!)",
 	Callback = function(Value)
@@ -283,7 +283,7 @@ local i7v7Farm = AutofarmSection.Dropdown({
 	Callback = function(Value)
 		if Value == "Join 7v7" then
 			if Value == "Join 7v7" then
-			game:GetService("TeleportService"):Teleport(10896820425, LocalPlayer)	
+				game:GetService("TeleportService"):Teleport(10896820425, LocalPlayer)	
 			end	
 		end	
 		if Value == "Start 7v7" then
@@ -500,7 +500,7 @@ local Handles = AutofarmSection.TextField({
 			game:GetService("Players"):WaitForChild(User):WaitForChild("PlayerGui"):WaitForChild("GetHandlesQuestStuff"):WaitForChild("whereblack"):WaitForChild("Green"):FireServer()
 			task.wait()		
 		end
-end})
+	end})
 
 --Teleport
 
@@ -510,21 +510,21 @@ local Power = TeleportSection.Button({
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(483, 707, 30)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").PowerQuest.ProximityPrompt)
-end})
+	end})
 local Handles = TeleportSection.Button({
 	Text = "Handles",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(48, 240, -290)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").HandlesTraining.QuestButton.ProximityPrompt)
-end})
+	end})
 local Prestige = TeleportSection.Button({
 	Text = "Prestige",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(746, 376, -1042)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").PrestigeChat.ProximityPrompt)
-end})
+	end})
 local LimitBreaker = TeleportSection.Button({
 	Text = "LimitBreaker",
 	Callback = function()
@@ -532,11 +532,11 @@ local LimitBreaker = TeleportSection.Button({
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").LimitBreakerChat.ProximityPrompt)
 
-end})
+	end})
 local Hiss = TeleportSection.Button({
 	Text = "Hiss",
 	Callback = function()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-154, 239, 350)
 		task.wait(.3)
 		fireproximityprompt(game:GetService("Workspace").GetHissa.ProximityPrompt)
-end})
+	end})
