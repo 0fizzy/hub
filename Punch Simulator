@@ -1,0 +1,173 @@
+--Library
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
+local LibraryLoader = Library.Load({
+	Title = "Xero HUB PS",
+	Style = 3,
+	SizeX = 500,
+	SizeY = 350,
+	Theme = "Light",
+	ColorOverrides = {
+		MainFrame = Color3.fromRGB(235,235,235)
+	}
+})
+
+--Tabs
+local AutofarmTab = LibraryLoader.New({
+	Title = "AutoFarm"
+})
+local WorldsTab = LibraryLoader.New({
+	Title = "Worlds"
+})
+
+--AutoFarm Tab
+local EggSelector = AutofarmTab.TextField({
+	Text = "Egg Selector",
+	Callback = function(Value)
+		if Value == "ForestEgg" or "Forest Egg" then
+			_G.Egg = "1"
+		end
+		if Value == "ForestEgg2" or "Forest Egg 2" then
+			_G.Egg = "Forest2"
+		end
+		if Value == "DesertEgg" or "Desert Egg" then
+			_G.Egg = "2"
+		end
+		if Value == "CaveEgg" or "Cave Egg" then
+			_G.Egg = "3"
+		end
+		if Value == "OceanEgg" or "Ocean Egg" then
+			_G.Egg = "4"
+		end
+		if Value == "CandyEgg" or "Candy Egg" then
+			_G.Egg = "5"
+		end
+		if Value == "SnowEgg" or "Snow Egg" then
+			_G.Egg = "6"
+		end
+		if Value == "ToyEgg" or "Toy Egg" then
+			_G.Egg = "7"
+		end
+		if Value == "FarmEgg" or "Farm Egg" then
+			_G.Egg = "8"
+		end
+		if Value == "SamuraiEgg" or "Samurai Egg" then
+			_G.Egg = "9"
+		end	
+		if Value == "SummerEgg" or "Summer Egg" then
+		_G.Egg = "SummerEgg"
+		end	
+		if Value == "SpaceEgg" or "Space Egg" then
+		_G.Egg = "10"
+		end
+end})
+local EggAutoFarm = AutofarmTab.Toggle({
+	Text = "Egg AutoFarm",
+	Callback = function(Value)
+	_G.Enabled = Value
+		if Value == true then
+			while task.wait() do
+				local args = {
+					[1] = _G.Egg
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PlayerPressedKeyOnEgg"):FireServer(unpack(args))		
+				if _G.Enabled == false then break			
+				end
+			end	
+		end
+	end,
+	_G.Enabled == false
+})
+local RemoveEggCinematicFarm = AutofarmTab.Toggle({
+	Text = "Remove egg cinematic",
+	Callback = function(Value)
+		_G.Enabled = Value
+		if Value == true then
+			while task.wait() do
+			game:GetService("Workspace").Camera:WaitForChild("EggOpenMap"):Destroy()		
+			if _G.Enabled == false then break			
+				end
+			end	
+		end
+	end,
+	_G.Enabled == false
+})
+local AutoFightFarm = AutofarmTab.Toggle({
+	Text = "AutoFight Farm",
+	Callback = function(Value)
+		_G.Enabled = Value
+		if _G.Enabled == true then
+			while task.wait() do
+				local args = {
+					[1] = true
+				}
+			game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PushEvent"):FireServer(unpack(args))
+					if _G.Enabled == false then break	
+					end
+				end	
+			end
+	end,
+	_G.Enabled == false
+})
+local DamageFarm = AutofarmTab.Toggle({
+	Text = "Damage AutoFarm",
+	Callback = function(Value)
+		_G.Enabled = Value
+		if _G.Enabled == true then
+			while task.wait() do
+			game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("DamageIncreaseOnClickEvent"):FireServer()		
+			if _G.Enabled == false then break			
+				end
+			end	
+		end
+end,
+	_G.Enabled == false
+})
+
+--Worlds Tab
+local WorldsTeleports = WorldsTab.Dropdown({
+	Text = "Worlds",
+	Callback = function(Value)
+		local player = game:GetService("Players").LocalPlayer
+		if Value == "Forest" then
+		player.Character.HumanoidRootPart.CFrame = CFrame.new(-1350.64844, 102.208694, 2381.90356)
+		end
+		if Value == "Desert" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-2199.42407, 101.53054, 2483.5437)
+		end
+		if Value == "Cave" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-2995.90576, 102.139114, 2483.10132)
+		end
+		if Value == "Ocean" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-4099.77295, 101.796532, 2482.45508)
+		end
+		if Value == "Candy Zone" then
+		player.Character.HumanoidRootPart.CFrame = CFrame.new(-4848.80273, 102.057434, 2484.50415)
+		end
+		if Value == "Snow" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-6100.26562, 101.88092, 2483.80884)
+		end
+		if Value == "Toy Zone" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-7509.28125, 102.60939, 2482.72852)
+		end
+		if Value == "Farm" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-9365.1084, 102.208694, 2482.50342)
+		end
+		if Value == "Samurai" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-10589.1084, 101.208694, 2486.50342)
+		end
+		if Value == "Space" then
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-12284.708, 101.508698, 2485.80371)
+		end
+	end,
+	Options = {
+		"Forest",
+		"Desert",
+		"Cave",
+		"Ocean",
+		"Candy Zone",
+		"Snow",
+		"Toy Zone",
+		"Farm",
+		"Samurai",
+		"Space"
+},})
