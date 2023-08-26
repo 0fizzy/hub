@@ -164,16 +164,6 @@ local LagServer = GeneralSection.Toggle({
 	end,
 	_G.Actived == false
 })
-_G.Spam = true
-if _G.Spam == true then
-	while task.wait() do
-		game:GetService("Players").LocalPlayer.Character.FlameDance.RemoteEvent:FireServer()
-		game:GetService("Players").LocalPlayer.Character.VariantSpiralDraw.RemoteEvent:FireServer()
-		if _G.Spam == false then break
-		end
-	end
-end
-
 
 --AutoFarm
 local IceCream = AutofarmSection.Toggle({
