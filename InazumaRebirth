@@ -1,3 +1,4 @@
+
 --Lib/Tab
 local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
 local Tab = Lib.Load({
@@ -26,7 +27,7 @@ local ConfigurationSection = Tab.New({
 	Title = "Configuration"
 })
 
--- GENERAL SECTION --
+
 
 local HBE = GeneralSection.Toggle({
 	Text = "HBE",
@@ -38,19 +39,37 @@ local HBE = GeneralSection.Toggle({
 				if v.Name ~= game:GetService('Players').LocalPlayer.Name then
 					pcall(function()
 						if _G.Enabled then
+							v.Character.Head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
 							v.Character.Head.Transparency = _G.Transparency
+							v.Character.Head.Material = Enum.Material.Neon
 							v.Character.Head.Color = _G.Color
-							if not _G.TeamCheck or (_G.TeamCheck and v.Team ~= game:GetService("Players").LocalPlayer.Team) then
-								v.Character.Head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
-								v.Character.Head.CanCollide = false
-								v.Character.Head.Massless = true
-							else
-								v.Character.Head.Size = Vector3.new(2, 1, 1)
-								v.Character.Head.Transparency = 0
-							end
+							v.Character.Head.CanCollide = false
+							v.Character.Head.Massless = true
+						else
+							v.Character.Head.Size = Vector3.new(2, 1, 1)
+							v.Character.Head.Transparency = _G.Transparency
+							v.Character.Head.Material = Enum.Material.Plastic
+							v.Character.Head.Color = _G.Color
+							v.Character.Head.CanCollide = true
+							v.Character.Head.Massless = false
+						end
+					end)
+				else
+					pcall(function()
+						if _G.Enabled then
+							v.Character.Head.Size = Vector3.new(2, 1, 1)
+							v.Character.Head.Transparency = 1
+							v.Character.Head.Material = Enum.Material.Plastic
+							v.Character.Head.Color = _G.Color
+							v.Character.Head.CanCollide = false
+							v.Character.Head.Massless = true
 						else
 							v.Character.Head.Size = Vector3.new(2, 1, 1)
 							v.Character.Head.Transparency = 0
+							v.Character.Head.Material = Enum.Material.Plastic
+							v.Character.Head.Color = _G.Color
+							v.Character.Head.CanCollide = true
+							v.Character.Head.Massless = false
 						end
 					end)
 				end
@@ -59,28 +78,6 @@ local HBE = GeneralSection.Toggle({
 	end,
 	_G.Enabled == false
 })
-
-local FullHiss = GeneralSection.Button({
-	Text = "Hiss Amount",
-	Callback = function()
-		local Player = game:GetService("Players").LocalPlayer
-		Player.Data.TP.Value = 100
-	end})
-
-local HissCooldown = GeneralSection.Button({
-	Text = "Remove Hiss CD",
-	Callback = function()
-		for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-			pcall(function()
-				if v == workspace:GetService("Players").LocalPlayer.HissatsuCD then
-					v:Destroy()
-				end
-			end)
-		end
-	end
-})
-
--- CONFIGURATION SECTION --
 
 local HBESize = ConfigurationSection.TextField({
 	Text = "HBE Size",
@@ -109,13 +106,10 @@ local HBE = ConfigurationSection.Toggle({
 	Text = "HBE Team Checker",
 	Callback = function(Value)
 		_G.TeamCheck = Value
-
 	end,
 	_G.TeamCheck == false
 })
 
-_G.TeamCheck = true
 _G.Transparency = 0.944
-_G.HeadSize = 6
-_G.HissCD = false
+_G.HeadSize = 8
 _G.TeamCheck = false
