@@ -1,37 +1,61 @@
---Lib/Tab
-local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
-local Tab = Lib.Load({
-	Title = "Xero IR V3",
-	Style = 3,
-	SizeX = 500,
-	SizeY = 350,
-	Theme = "Dark",
-	ColorOverrides = {
-		MainFrame = Color3.fromRGB(103, 103, 103)
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+_G.HeadSize = _G.HeadSize or 6
+_G.HeadTransparency = _G.HeadTransparency or 0
+_G.TeamCheck = _G.TeamCheck or false
+_G.InfStam = false
+
+local Cache = Instance.new("Folder", workspace)
+Cache.Name = "Cache"
+
+local Window = Rayfield:CreateWindow({
+	Name = "IR Xero Hub",
+	Icon = "Shield",
+	LoadingTitle = "IR Xero Hub",
+	LoadingSubtitle = "Version 1.0.0",
+	Theme = "Default", 
+
+	DisableRayfieldPrompts = false,
+	DisableBuildWarnings = true,
+
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "X Hub",
+		FileName = "X Hub"
+	},
+
+	Discord = {
+		Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+	},
+
+	KeySystem = false, -- Set this to true to use our key system
+	KeySettings = {
+		Title = "Key",
+		Subtitle = "Key System",
+		Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+		FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+		SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
 	}
 })
 
---Sections
+local GeneralTab = Window:CreateTab("General", "Play")
+local ConfigurationTab = Window:CreateTab("Configuration", "Settings")
+local MiscTab = Window:CreateTab("Misc", "Badge-info")
 
-local GeneralSection = Tab.New({
-	Title = "General"
-})
-local AutofarmSection = Tab.New({
-	Title = "Autofarm"
-})
-local TeleportSection = Tab.New({
-	Title = "Teleports"
-})
-local ConfigurationSection = Tab.New({
-	Title = "Configuration"
-})
+--------------- GENERAL TAB --------------
 
--- GENERAL SECTION --
+GeneralTab:CreateSection("Hitbox Expander")
 
-local HBE = GeneralSection.Toggle({
-	Text = "HBE",
-	Callback = function(Value)
-		_G.Enabled = Value
+local HBEToggle = GeneralTab:CreateToggle({
+	Name = "Hitbox Expander",
+	CurrentValue = false,
+	Flag = "HBE Toggle", 
+	Callback = function(Bool)
+		_G.Enabled = Bool
 
 		game:GetService('RunService').RenderStepped:connect(function()
 			for _, v in next, game:GetService('Players'):GetPlayers() do
@@ -42,6 +66,7 @@ local HBE = GeneralSection.Toggle({
 
 							if not _G.TeamCheck or (_G.TeamCheck and v.Team ~= game:GetService("Players").LocalPlayer.Team) then
 								v.Character.Head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
+								v.Character.Head.Transparency = _G.HeadTransparency
 								v.Character.Head.CanCollide = false
 								v.Character.Head.Massless = true
 							else
@@ -57,55 +82,189 @@ local HBE = GeneralSection.Toggle({
 			end
 		end)
 	end,
-	_G.Enabled == false
 })
 
-local FullHiss = GeneralSection.Button({
-	Text = "Hiss Amount",
-	Callback = function()
-	local Player = game:GetService("Players").LocalPlayer
-	Player.Data.TP.Value = 100
-end})
+GeneralTab:CreateDivider("Mechanics")
 
-local HissCooldown = GeneralSection.Button({
-	Text = "Remove Hiss CD",
+local InfiniteStam = GeneralTab:CreateButton({
+	Name = "Infinite Stamina",
+	CurrentValue = false,
+	Flag = "Infinite Stam Flag", 
 	Callback = function()
-			for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-				pcall(function()
-					if v == workspace:GetService("Players").LocalPlayer.HissatsuCD then
-						v:Destroy()
-					end
-				end)
-			end
-	end
+
+	if _G.InfStam == false then
+		local Player = game:GetService("Players").LocalPlayer
+		pcall(function()
+		Player.Character.Torso.StaminaGui.Parent = nil					
+		end)
+		Rayfield:Notify({
+				Title = "Infinite Stamina Sucessful!",
+				Content = "Infinite Stamina added.",
+				Duration = 6,
+				Image = "check",
+			})
+		_G.InfStam = true
+	else
+		Rayfield:Notify({
+				Title = "Infinite Stamina Failed",
+				Content = "Seems like you already have it.",
+				Duration = 6,
+				Image = "x",
+			})		
+		end	
+	end,
 })
 
--- CONFIGURATION SECTION --
+--------------- CONFIGURATION TAB --------------
 
-local HBESize = ConfigurationSection.TextField({
-	Text = "HBE Size",
+ConfigurationTab:CreateSection("Hitbox Expander")
+
+local HBESize = ConfigurationTab:CreateSlider({
+	Name = "HBE Size",
+	Range = {1, 200},
+	Increment = 1,
+	Suffix = "Studs",
+	CurrentValue = 0,
+	Flag = "HBE Size Flag",
 	Callback = function(Size)
 		_G.HeadSize = Size
 	end
 })
 
-local HBETransparency = ConfigurationSection.TextField({
-	Text = "HBE Transparency",
+local HBETransparency = ConfigurationTab:CreateSlider({
+	Name = "HBE Transparency",
+	Range = {0, 1},
+	Increment = 0.05,
+	Suffix = "Transparency",
+	CurrentValue = 0,
+	Flag = "HBE Transparency Flag",
 	Callback = function(Transparency)
-		_G.Transparency = Transparency
+		_G.HeadTransparency = Transparency
 	end
 })
 
-local HBE = ConfigurationSection.Toggle({
-	Text = "HBE Team Checker",
-	Callback = function(Value)
-		_G.TeamCheck = Value
-
+local HBETeamCheck = ConfigurationTab:CreateToggle({
+	Name = "HBE Team Check",
+	CurrentValue = false,
+	Flag = "HBE Team Check Flag", 
+	Callback = function(Bool)
+		_G.TeamCheck = Bool
 	end,
-	_G.TeamCheck == false
 })
 
-_G.Transparency = 0.944
-_G.HeadSize = 6
-_G.HissCD = false
-_G.TeamCheck = false
+local RemoveFace = ConfigurationTab:CreateButton({
+	Name = "Remove Heads Faces",
+	CurrentValue = false,
+	Flag = "Remove Head Face Flag", 
+	Callback = function(Bool)
+		for _, v in pairs(game:GetService('Players'):GetPlayers()) do
+			if v ~= game:GetService('Players').LocalPlayer then
+				pcall(function()
+					local head = v.Character:FindFirstChild("Head")
+					local face = head:FindFirstChildOfClass("Decal")
+					face:Destroy()
+				end)
+			end
+		end
+	end,
+})
+
+
+ConfigurationTab:CreateDivider()
+ConfigurationTab:CreateSection("Optimization")
+
+local BigOptimizationButton = ConfigurationTab:CreateButton({
+	Name = "Optimization",
+	Callback = function()
+		if not _G.BigOptimize then
+			for _, v in next, game:GetDescendants() do
+				if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+					v.Material = Enum.Material.SmoothPlastic
+				end
+				if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+					v.Enabled = false
+				end
+				if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+					v.Enabled = false
+				end
+				if v:IsA("Decal") or v:IsA("Texture") then
+					v.Texture = ""
+				end
+				if v:IsA("Sky") then
+					v.Parent = nil
+				end
+			end
+			_G.BigOptimize = true
+			Rayfield:Notify({
+				Title = "Optimized done!",
+				Content = "Optimization is Done.",
+				Duration = 6,
+				Image = "check",
+			})
+		else
+			Rayfield:Notify({
+				Title = "Optimized Failed",
+				Content = "Seems like you already optimized it.",
+				Duration = 6.5,
+				Image = "x",
+			})
+		end
+	end,
+})
+
+local RemoveTexturesButton = ConfigurationTab:CreateButton({
+	Name = "Remove Textures",
+	Callback = function()
+		if not _G.Textures then
+			for _, v in next, game:GetDescendants() do
+				if v:IsA("Texture") then
+					v:Destroy()
+					_G.Textures = true
+				end
+			end
+			Rayfield:Notify({
+				Title = "Optimized done!",
+				Content = "Textures removed.",
+				Duration = 6,
+				Image = "check",
+			})
+		else
+			Rayfield:Notify({
+				Title = "Optimized Failed",
+				Content = "Seems like you already optimized it.",
+				Duration = 6.5,
+				Image = "x",
+			})
+		end
+	end,
+})
+
+ConfigurationTab:CreateDivider()
+ConfigurationTab:CreateSection("Customization")
+
+local HBEColor = ConfigurationTab:CreateColorPicker({
+	Name = "Hitbox Expander Color",
+	Color = Color3.fromRGB(255,255,255),
+	Flag = "Hitbox Expander Flag", 
+	Callback = function(Color)
+			for _, v in next, game:GetService('Players'):GetPlayers() do
+				if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+					pcall(function()
+						v.Character.Head.Color = Color
+					end)
+				end
+			end 
+	end
+})
+
+--------------- MISC TAB --------------
+
+MiscTab:CreateSection("Destroy UI")
+local DestroyGUI = MiscTab:CreateButton({
+	Name = "Destroy GUI",
+	Callback = function()
+		Rayfield:Destroy()
+	end,
+})
+
+Rayfield:LoadConfiguration()
