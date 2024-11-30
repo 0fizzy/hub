@@ -1,12 +1,5 @@
---[[
-If you manage to reach here, contact: esp_xero on discord.
-dont be a skid, this scripts takes days to do.
-]]
-
------------------------------------Locals-----------------------------------
-
 local Webhook = "https://discord.com/api/webhooks/1312478633805348975/Aoye2DVebeJVYRZgCe1h2I3Ji0fxaxI3-OS4Xtn4ikEyzD71OmOJ9eInwloLj9aTRyCv" 
-_G.Discord_UserID = "" 
+_G.Discord_UserID = ""
 
 local player = game:GetService("Players").LocalPlayer
 local joinTime = os.time() - (player.AccountAge*86400)
@@ -16,26 +9,24 @@ local icon = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/
 icon = game:GetService("HttpService"):JSONDecode(icon).data[1]
 local AvatarImage = icon.imageUrl
 
------------------------------------Webhook-----------------------------------
-local request = (syn and syn.request) or (http and http.request) or http_request
-if request then
-	request(
-		{
-			Url = "http://127.0.0.1:6463/rpc?v=1",
-			Method = "POST",
-			Headers = {
-				["Content-Type"] = "application/json",
-				["Origin"] = "https://discord.com"
-			},
-			Body = game:GetService("HttpService"):JSONEncode(
-			{
-				cmd = "INVITE_BROWSER",
-				args = {code = "jVrEHgMJMn"},
-				nonce = game:GetService("HttpService"):GenerateGUID(false)
-			}
-			)
-		}
-	)
+local AllowedHWIDs = {
+	"40EC9CDA-1B51-4A38-B2BD-9B50E7C1E1E3", -- Xero
+	"D9FAB63E-42BA-4C1A-8637-0D79BCD5B820", -- Fly
+	"hwid3"
+}
+
+local function getHWID()
+	return game:GetService("RbxAnalyticsService"):GetClientId()
+end
+
+local userHWID = getHWID()
+_G.HWID = false
+
+for _, hwid in ipairs(AllowedHWIDs) do
+	if userHWID == hwid then
+		_G.HWID = true
+		break
+	end
 end
 
 local msg = {
@@ -43,7 +34,7 @@ local msg = {
 	["embeds"] = {
 		{
 			["color"] = tonumber(tostring("0x32CD32")),
-			["title"] = "Someone executed the hub.",
+			["title"] = _G.HWID and "Someone executed the hub." or "Unauthorized execution attempt.",
 			["thumbnail"] = {
 				["url"] = AvatarImage,
 			},
@@ -88,29 +79,42 @@ local msg = {
 					["value"] = joinDate.day.."/"..joinDate.month.."/"..joinDate.year,
 					["inline"] = true
 				},
+				{
+					["name"] = "HWID",
+					["value"] = userHWID,
+					["inline"] = true
+				},
+				{
+					["name"] = "Allowed",
+					["value"] = tostring(_G.HWID),
+					["inline"] = true
+				},
 			},
 			['timestamp'] = os.date("%Y-%m-%dT%X.000Z")
 		}
 	}
 }
-request = http_request or request or HttpPost or syn.request
-request({Url = Webhook, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = game.HttpService:JSONEncode(msg)})
-
-
------------------------------------Games-----------------------------------
-
-local PlaceId = game.PlaceId
-
-local games = {
-	--SLS
-	[12177325772] = "https://raw.githubusercontent.com/0fizzy/hub/main/Punch%20Simulator",
-	--Inazuma Rebirth
-	[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
-}
-
-if games[PlaceId] then
-	return loadstring(game:HttpGet(games[PlaceId]))()
+local request = (syn and syn.request) or (http and http.request) or http_request
+if request then
+	request({Url = Webhook, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = game:GetService("HttpService"):JSONEncode(msg)})
 end
 
+if _G.HWID then
+	local PlaceId = game.PlaceId
 
-player:Kick("Game is not supported, join .gg/jVrEHgMJMn to suggest, copied to your clipboard.")
+	local games = {
+		[12177325772] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
+		[14382948560] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
+		[110948941832728] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
+		[126195208568849] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
+		[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
+	}
+
+	if games[PlaceId] then
+		return loadstring(game:HttpGet(games[PlaceId]))()
+	end
+
+	player:Kick("Game is not supported, join .gg/jVrEHgMJMn to suggest, copied to your clipboard.")
+else
+	player:Kick(game:GetService("RbxAnalyticsService"):GetClientId() .. " Not whitelisted.")
+end
