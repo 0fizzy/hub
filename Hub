@@ -5,7 +5,7 @@ dont be a skid, this scripts takes days to do.
 
 -----------------------------------Locals-----------------------------------
 
-local Webhook = "https://discord.com/api/webhooks/1090380292080025722/lJYNg4SNr85IhZC-K0itiGgBSsJz2kS9nu2mrDskVNGxcjyn18aljZvPW0sbA2-2RHrn" 
+local Webhook = "https://discord.com/api/webhooks/1312478633805348975/Aoye2DVebeJVYRZgCe1h2I3Ji0fxaxI3-OS4Xtn4ikEyzD71OmOJ9eInwloLj9aTRyCv" 
 _G.Discord_UserID = "" 
 
 local player = game:GetService("Players").LocalPlayer
@@ -102,8 +102,8 @@ request({Url = Webhook, Method = "POST", Headers = {["Content-Type"] = "applicat
 local PlaceId = game.PlaceId
 
 local games = {
-	--Punch Simulator
-	[14236123211] = "https://raw.githubusercontent.com/0fizzy/hub/main/Punch%20Simulator",
+	--SLS
+	[12177325772] = "https://raw.githubusercontent.com/0fizzy/hub/main/Punch%20Simulator",
 	--Inazuma Rebirth
 	[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
 }
