@@ -109,6 +109,13 @@ local AwayGoalExtender = GeneralTab:CreateSlider({
 	end,
 })
 
+local DefaultGoalHitbox = GeneralTab:CreateButton({
+	Name = "Default Hitbox",
+	Callback = function()
+		game:GetService("Workspace").Stadium.Teams.Home.Goal.Hitbox.Size = Vector3.new(31.327, 11.278, 8.289)
+		game:GetService("Workspace").Stadium.Teams.Away.Goal.Hitbox.Size = Vector3.new(31.327, 11.278, 8.339)
+	end,
+})
 
 --------------- CONFIGURATION TAB --------------
 
