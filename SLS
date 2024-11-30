@@ -1,0 +1,300 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+_G.SmallOptimize = _G.SmallOptimize or false
+_G.BigOptimize = _G.BigOptimize or false
+_G.Textures = _G.Textures or false
+
+local Window = Rayfield:CreateWindow({
+   Name = "SLS X Hub",
+   Icon = "Shield",
+   LoadingTitle = "SLS X Hub",
+   LoadingSubtitle = "Version 1.0.0",
+   Theme = "Default", 
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = true,
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "X Hub",
+      FileName = "X Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Key",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local GeneralTab = Window:CreateTab("General", "Play")
+local ConfigurationTab = Window:CreateTab("Configuration", "Settings")
+
+--------------- GEENRAL TAB --------------
+
+GeneralTab:CreateSection("Hitbox Expander")
+
+local HBESize = GeneralTab:CreateSlider({
+   Name = "Hitbox Expander",
+   Range = {2, 100},
+   Increment = 1,
+   Suffix = "Studs",
+   CurrentValue = 6,
+   Flag = "Hitbox Expander Flag",
+   Callback = function(Size)
+	local Player = game:GetService("Players").LocalPlayer
+	Player.Character.Hitbox.Size = Vector3.new(Size, Size, Size)
+
+   end,
+})
+
+local TackleExtender = GeneralTab:CreateSlider({
+   Name = "Tackle Extender",
+   Range = {2, 100},
+   Increment = 1,
+   Suffix = "Studs",
+   CurrentValue = 6,
+   Flag = "Tackle Extender Flag",
+   Callback = function(Size)
+	local Player = game:GetService("Players").LocalPlayer
+	Player.Character.TackleHitbox.Size = Vector3.new(Size, Size, Size)
+   end,
+})
+
+local DefaultHitbox = GeneralTab:CreateButton({
+   Name = "Default Hitbox",
+   Callback = function()
+	local Player = game:GetService("Players").LocalPlayer
+	Player.Character.Hitbox.Size = Vector3.new(4.521, 5.73, 2.398)
+	Player.Character.TackleHitbox.Size = Vector3.new(2.57, 5.73, 2.064)
+   end,
+})
+
+GeneralTab:CreateDivider()
+GeneralTab:CreateSection("Goal Expander")
+
+local HomeGoalExtender = GeneralTab:CreateSlider({
+   Name = "Home Goal Extender",
+   Range = {5, 1000},
+   Increment = 1,
+   Suffix = "Studs",
+   CurrentValue = 5,
+   Flag = "Home Goal Extender Flag",
+   Callback = function(Size)
+	game:GetService("Workspace").Stadium.Teams.Home.Goal.Hitbox.Size = Vector3.new(31.327, 11.278, Size)
+   end,
+})
+
+local AwayGoalExtender = GeneralTab:CreateSlider({
+   Name = "Away Goal Extender",
+   Range = {5, 1000},
+   Increment = 1,
+   Suffix = "Studs",
+   CurrentValue = 5,
+   Flag = "Away Goal Extender Flag",
+   Callback = function(Size)
+	game:GetService("Workspace").Stadium.Teams.Away.Goal.Hitbox.Size = Vector3.new(31.327, 11.278, Size)
+   end,
+})
+
+--------------- CONFIGURATION TAB --------------
+
+ConfigurationTab:CreateSection("Hitbox Expander")
+local HBETransparency = ConfigurationTab:CreateSlider({
+   Name = "HBE Transparency",
+   Range = {0, 1},
+   Increment = 0.05,
+   Suffix = "Transparency",
+   CurrentValue = 0,
+   Flag = "HBE Transparency Flag",
+   Callback = function(Transparency)
+	local Player = game:GetService("Players").LocalPlayer
+	Player.Character.Hitbox.Transparency = Transparency
+   end,
+})
+
+local TackleTransparency = ConfigurationTab:CreateSlider({
+   Name = "Tackle Extender Transparency",
+   Range = {0, 1},
+   Increment = 0.05,
+   Suffix = "Transparency",
+   CurrentValue = 0,
+   Flag = "Tackle Extender Transparency Flag",
+   Callback = function(Transparency)
+	local Player = game:GetService("Players").LocalPlayer
+	Player.Character.TackleHitbox.Transparency = Transparency
+   end,
+})
+
+ConfigurationTab:CreateDivider()
+ConfigurationTab:CreateSection("Goal Expander")
+
+local HomeGoalTransparency = ConfigurationTab:CreateSlider({
+   Name = "Home Goal Transparency",
+   Range = {0, 1},
+   Increment = 0.05,
+   Suffix = "Transparency",
+   CurrentValue = 1,
+   Flag = "Home Goal Transparency Flag",
+   Callback = function(Transparency)
+	game:GetService("Workspace").Stadium.Teams.Home.Goal.Hitbox.Transparency = Transparency
+   end,
+})
+
+local AwayGoalTransparency = ConfigurationTab:CreateSlider({
+   Name = "Away Goal Transparency",
+   Range = {0, 1},
+   Increment = 0.05,
+   Suffix = "Transparency",
+   CurrentValue = 1,
+   Flag = "Away Goal Transparency Flag",
+   Callback = function(Transparency)
+	game:GetService("Workspace").Stadium.Teams.Away.Goal.Hitbox.Transparency = Transparency
+   end,
+})
+
+ConfigurationTab:CreateDivider()
+ConfigurationTab:CreateSection("Optimization")
+
+local SmallOptimizationButton = ConfigurationTab:CreateButton({
+   Name = "Small Optimization",
+   Callback = function()
+      if not _G.SmallOptimize then
+         pcall(function()
+            game:GetService("Workspace").AdPlacements:Destroy()
+            game:GetService("Workspace").Stadium.Billboards:Destroy()
+
+            game:GetService("Workspace").Stadium.Teams.Away.Audience:Destroy()
+            game:GetService("Workspace").Stadium.Teams.Away.Flares:Destroy()
+            game:GetService("Workspace").Stadium.Teams.Away.Tifos:Destroy()
+
+            game:GetService("Workspace").Stadium.Teams.Home.Audience:Destroy()
+            game:GetService("Workspace").Stadium.Teams.Home.Flares:Destroy()
+            game:GetService("Workspace").Stadium.Teams.Home.Tifos:Destroy()
+            game:GetService("Workspace").Stadium.Flashes:Destroy()
+
+            game:GetService("Workspace").Lobby.Content:Destroy()
+            game:GetService("Workspace").Lobby.Build.ItemDisplay:Destroy()
+            game:GetService("Workspace").Lobby.Build.PackStands:Destroy()
+            game:GetService("Workspace").Lobby.Build.Lockers:Destroy()
+
+            _G.SmallOptimize = true
+
+            Rayfield:Notify({
+               Title = "Optimized done!",
+               Content = "Optimization is Done.",
+               Duration = 6,
+               Image = "check",
+            })
+         end)
+      else
+         Rayfield:Notify({
+            Title = "Optimized Failed",
+            Content = "Seems like you already optimized it.",
+            Duration = 6.5,
+            Image = "x",
+         })
+      end
+   end,
+})
+
+local BigOptimizationButton = ConfigurationTab:CreateButton({
+   Name = "Hard Optimization",
+   Callback = function()
+   if not _G.BigOptimize then
+	for _, v in next, game:GetDescendants() do
+		if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+			v.Material = Enum.Material.SmoothPlastic
+	end
+		if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+			v.Enabled = false
+		end
+		if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+			v.Enabled = false
+	end
+		if v:IsA("Decal") or v:IsA("Texture") then
+			v.Texture = ""
+	end
+		if v:IsA("Sky") then
+			v.Parent = nil
+		end
+	end
+	_G.BigOptimize = true
+		Rayfield:Notify({
+               Title = "Optimized done!",
+               Content = "Optimization is Done.",
+               Duration = 6,
+               Image = "check",
+            })
+	else
+		Rayfield:Notify({
+            Title = "Optimized Failed",
+            Content = "Seems like you already optimized it.",
+            Duration = 6.5,
+            Image = "x",
+         })
+	 end
+  end,
+})
+
+local RemoveTexturesButton = ConfigurationTab:CreateButton({
+   Name = "Remove Textures",
+   Callback = function()
+   if not _G.Textures then
+	for _, v in next, game:GetDescendants() do
+	if v:IsA("Texture") then
+			v:Destroy()
+			_G.Textures = true
+		end
+	end
+	Rayfield:Notify({
+               Title = "Optimized done!",
+               Content = "Textures removed.",
+               Duration = 6,
+               Image = "check",
+            })
+else
+		Rayfield:Notify({
+            Title = "Optimized Failed",
+            Content = "Seems like you already optimized it.",
+            Duration = 6.5,
+            Image = "x",
+         })
+end
+  end,
+})
+
+ConfigurationTab:CreateDivider()
+ConfigurationTab:CreateSection("Customization")
+
+local FieldColor = ConfigurationTab:CreateColorPicker({
+    Name = "Field Grass Color",
+    Color = Color3.fromRGB(255,255,255),
+    Flag = "Field Color Flag", 
+    Callback = function(Color)
+       game:GetService("Workspace").Stadium.Field.Grass.Color = Color
+	   game:GetService("Workspace").Stadium.Build.Pitch["Meshes/pitch and lines_training pitch.005"].Color = Color
+    end
+})
+
+local LinesColor = ConfigurationTab:CreateColorPicker({
+    Name = "Lines Color",
+    Color = Color3.fromRGB(255,255,255),
+    Flag = "Lines Color Flag", 
+    Callback = function(Color)
+      game:GetService("Workspace").Stadium.Field.Lines.Color = Color
+    end
+})
+
+Rayfield:LoadConfiguration()
