@@ -12,7 +12,7 @@ local AvatarImage = icon.imageUrl
 local AllowedHWIDs = {
 	"40EC9CDA-1B51-4A38-B2BD-9B50E7C1E1E3", -- Xero
 	"D9FAB63E-42BA-4C1A-8637-0D79BCD5B820", -- Fly
-	"hwid3"
+	"BD6A2E46-2EEC-4A87-B753-16FA31CF6194" -- Weroy
 }
 
 local function getHWID()
