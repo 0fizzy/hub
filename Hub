@@ -103,11 +103,16 @@ if _G.HWID then
 	local PlaceId = game.PlaceId
 
 	local games = {
+		--SLS
 		[12177325772] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
 		[14382948560] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
 		[110948941832728] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
 		[126195208568849] = "https://raw.githubusercontent.com/0fizzy/hub/main/SLS",
-		[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
+
+		-- IR
+		[9586878618] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth",
+		[9586935578] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth",
+		[10896820425] = "https://raw.githubusercontent.com/0fizzy/hub/main/InazumaRebirth"
 	}
 
 	if games[PlaceId] then
