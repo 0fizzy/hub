@@ -114,7 +114,7 @@ if _G.HWID then
 		return loadstring(game:HttpGet(games[PlaceId]))()
 	end
 
-	player:Kick("Game is not supported, join .gg/jVrEHgMJMn to suggest, copied to your clipboard.")
+	player:Kick("Game is not supported by the hub.")
 else
 	player:Kick(game:GetService("RbxAnalyticsService"):GetClientId() .. " Not whitelisted.")
 end
