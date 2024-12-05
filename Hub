@@ -121,5 +121,5 @@ if _G.HWID then
 
 	player:Kick("Game is not supported by the hub.")
 else
-	player:Kick(game:GetService("RbxAnalyticsService"):GetClientId() .. " Not whitelisted.")
+	player:Kick("HWID not whitelisted: ".. game:GetService("RbxAnalyticsService"):GetClientId())
 end
