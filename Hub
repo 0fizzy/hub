@@ -1,4 +1,4 @@
-local Webhook = "https://discord.com/api/webhooks/1312478633805348975/Aoye2DVebeJVYRZgCe1h2I3Ji0fxaxI3-OS4Xtn4ikEyzD71OmOJ9eInwloLj9aTRyCv" 
+local Webhook = "https://discord.com/api/webhooks/1326217725936275477/_z5vk3RCbBw3iNejI-6iCavu7hQitPqWobDtyrs5M1IU_odtU4Gy_JieXPhXN8TCEwQH" 
 _G.Discord_UserID = ""
 
 local player = game:GetService("Players").LocalPlayer
